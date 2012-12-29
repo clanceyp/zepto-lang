@@ -46,11 +46,15 @@
 			* @return boolean
 			*/
 			isFunctionEmpty:function(obj){
-				var str = (function(){}).toString();
-				if (obj.toString() == str){
-					return true;
+				// only get RegExs when needed
+				var arr = Zepto.fn.Lang.getGetFunctionBodyRegEx().exec(obj);
+				if ( arr && arr.length > 1 && arr[1] !== undefined ){
+					var body = arr[1].replace( Zepto.fn.Lang.getRemoveCodeCommentsRegEx(), "");
+					if ( body && Zepto.fn.Lang.getContainsWordCharRegEx().test( body ) ){
+						return false;
+					}
 				}
-				return false;
+				return true;
 			},
 			/*
 			 * @method
@@ -153,8 +157,50 @@
 				}
 				return t;
 			},
+			/*
+			 * @method
+			 * @id Lang.getContainsWordCharRegEx
+			 * @alias Zepto.fn.Lang.getContainsWordCharRegEx
+			 * @memberOf Zepto.fn.Lang
+			 * @return RegEx
+			 */
+			getContainsWordCharRegEx:function(){
+				if (!Zepto.fn.Lang.reContainsWordChar){
+					Zepto.fn.Lang.reContainsWordChar = new RegExp("\\S+", "g");
+				}
+				return Zepto.fn.Lang.reContainsWordChar;
+			},
+			/*
+			 * @method
+			 * @id Lang.getGetFunctionBodyRegEx
+			 * @alias Zepto.fn.Lang.getGetFunctionBodyRegEx
+			 * @memberOf Zepto.fn.Lang
+			 * @return RegEx
+			 */
+			getGetFunctionBodyRegEx:function(){
+				if (!Zepto.fn.Lang.reGetFunctionBody){
+					Zepto.fn.Lang.reGetFunctionBody = new RegExp("{((.|\\s)*)}", "m");
+				}
+				return Zepto.fn.Lang.reGetFunctionBody;
+			},
+			/*
+			 * @method
+			 * @id Lang.getRemoveCodeCommentsRegEx
+			 * @alias Zepto.fn.Lang.getRemoveCodeCommentsRegEx
+			 * @memberOf Zepto.fn.Lang
+			 * @return RegEx
+			 */
+			getRemoveCodeCommentsRegEx:function(){
+				if (!Zepto.fn.Lang.reRemoveCodeComments){
+					Zepto.fn.Lang.reRemoveCodeComments = new RegExp("(\\/\\*[\\w\\'\\s\\r\\n\\*]*\\*\\/)|(\\/\\/[\\w\\s\\']*)","g");
+				}
+				return Zepto.fn.Lang.reRemoveCodeComments;
+			},
 			hasOwnProperty:({}).hasOwnProperty,
-			toString:({}).toString
+			toString:({}).toString,
+			reContainsWordChar:null,
+			reGetFunctionBody:null,
+			reRemoveCodeComments:null
 		}
 	})
 })(Zepto)

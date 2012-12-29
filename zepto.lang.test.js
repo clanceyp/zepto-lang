@@ -31,6 +31,13 @@ test( "Zepto.fn.Lang.isEmpty( [] )", function() {
 test( "Zepto.fn.Lang.isEmpty( function(){} )", function() {
 	equal( Zepto.fn.Lang.isEmpty( function(){} ), true, "Expected value : true" );
 });
+test( "Zepto.fn.Lang.isEmpty( function(){   } )", function() {
+	equal( Zepto.fn.Lang.isEmpty( function(){   } ), true, "Expected value : true" );
+});
+test( "Zepto.fn.Lang.isEmpty( EmptyFunction )", function() {
+	function EmptyFunction(a,b,c){};
+	equal( Zepto.fn.Lang.isEmpty( EmptyFunction ), true, "Expected value : true" );
+});
 test( "Zepto.fn.Lang.isEmpty( {} )", function() {
 	equal( Zepto.fn.Lang.isEmpty( {} ), true, "Expected value : true" );
 });
@@ -71,8 +78,8 @@ test( "Zepto.fn.Lang.isEmpty( Number.NEGATIVE_INFINITY )", function() {
 test( "Zepto.fn.Lang.isEmpty( [1] )", function() {
 	equal( Zepto.fn.Lang.isEmpty( [1] ), false, "Expected value : false" );
 });
-test( "Zepto.fn.Lang.isEmpty( function(){alert(1)} )", function() {
-	equal( Zepto.fn.Lang.isEmpty( function(){alert(1)} ), false, "Expected value : false" );
+test( "Zepto.fn.Lang.isEmpty( function(){    alert(1)   } )", function() {
+	equal( Zepto.fn.Lang.isEmpty( function(){   alert(1)   } ), false, "Expected value : false" );
 });
 test( "Zepto.fn.Lang.isEmpty( {\"val\":1} )", function() {
 	equal( Zepto.fn.Lang.isEmpty( {"val":1} ), false, "Expected value : false" );
@@ -93,9 +100,6 @@ test( "Zepto.fn.Lang.isFunction( testObject )", function() {
 });
 test( "Zepto.fn.Lang.isFunction( isNaN )", function() {
 	equal( Zepto.fn.Lang.isFunction( isNaN ), true, "Expected value : true" );
-});
-test( "Zepto.fn.Lang.isFunctionEmpty( function(){} )", function() {
-	equal( Zepto.fn.Lang.isFunctionEmpty( function(){} ), true, "Expected value : true" );
 });
 
 /**
@@ -122,11 +126,40 @@ test( "Zepto.fn.Lang.isFunction( \"\" )", function() {
 test( "Zepto.fn.Lang.isFunction( \"string\" )", function() {
 	equal( Zepto.fn.Lang.isFunction( "string" ), false, "Expected value : false" );
 });
+
+
+/**
+ * @comment isFunctionEmpty should be true
+ */
+test( "Zepto.fn.Lang.isFunctionEmpty( function(){} )", function() {
+	equal( Zepto.fn.Lang.isFunctionEmpty( function(){} ), true, "Expected value : true" );
+});
+test( "Zepto.fn.Lang.isFunctionEmpty( function(){    } )", function() {
+	equal( Zepto.fn.Lang.isFunctionEmpty( function(){    } ), true, "Expected value : true" );
+});
+test( "Zepto.fn.Lang.isFunctionEmpty( EmptyFunction )", function() {
+	function EmptyFunction(a,b,c){
+		// contains comments
+	}
+	equal( Zepto.fn.Lang.isFunctionEmpty( EmptyFunction ), true, "Expected value : true" );
+});
+
+/**
+ * @comment isFunctionEmpty should be false
+ */
+
 test( "Zepto.fn.Lang.isFunctionEmpty( function(){alert(1)} )", function() {
 	equal( Zepto.fn.Lang.isFunctionEmpty( function(){alert(1)} ), false, "Expected value : false" );
 });
-
-
+test( "Zepto.fn.Lang.isFunctionEmpty( function(){   alert(1)   } )", function() {
+	equal( Zepto.fn.Lang.isFunctionEmpty( function(){   alert(1)   } ), false, "Expected value : false" );
+});
+test( "Zepto.fn.Lang.isFunctionEmpty( function(){   NonEmptyFunction   } )", function() {
+	function NonEmptyFunction(){
+		alert(1);
+	}
+	equal( Zepto.fn.Lang.isFunctionEmpty( NonEmptyFunction ), false, "Expected value : false" );
+});
 
 
 
